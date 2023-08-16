@@ -1,0 +1,6 @@
+\beamer@sectionintoc {1}{线性同余方程}{3}{0}{1}
+\beamer@sectionintoc {2}{逆元}{4}{0}{2}
+\beamer@sectionintoc {3}{线性同余方程组}{8}{0}{3}
+\beamer@sectionintoc {4}{高次同余初步}{13}{0}{4}
+\beamer@sectionintoc {5}{练习}{18}{0}{5}
+\beamer@sectionintoc {6}{extra}{26}{0}{6}

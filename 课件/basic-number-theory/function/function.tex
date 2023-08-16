@@ -1,0 +1,461 @@
+\documentclass{ctexbeamer}        % 文档类beamer的汉化版本
+
+\usefonttheme{serif}              % 使用衬线字体
+\usefonttheme{professionalfonts}  % 数学公式字体
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{fontspec} % 定制字体
+\usepackage{xcolor} % 定制颜色
+\usepackage{hyperref}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+backgroundcolor=\color{white},      % choose the background color
+basicstyle=\footnotesize\ttfamily,  % size of fonts used for the code
+columns=fullflexible,
+tabsize=4,
+breaklines=true,               % automatic line breaking only at whitespace
+captionpos=b,                  % sets the caption-position to bottom
+commentstyle=\color{mygreen},  % comment style
+escapeinside={\%*}{*)},        % if you want to add LaTeX within your code
+keywordstyle=\color{blue},     % keyword style
+stringstyle=\color{mymauve}\ttfamily,  % string literal style
+frame=none,
+rulesepcolor=\color{red!20!green!20!blue!20},
+% identifierstyle=\color{red},
+language=c++,
+}
+
+%% --> 主题和色彩风格
+\usetheme{Frankfurt}       %主题和色彩可以自由搭配
+\usecolortheme{orchid}     %主题和色彩的样式可参见网页 https://mpetroff.net/files/beamer-theme-matrix/
+
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand{\stirling}[2]{\genfrac\{ \} {0pt}{}{#1}{#2}}
+\newcommand{\lcm}{\operatorname{lcm}}
+
+\begin{document}
+
+%% --> 导言页
+%
+\title{数论函数初步}
+\author{Quack}
+\date{\today}
+\frame{\titlepage}
+
+%% --> 目录结构
+\begin{frame}{目录}         %自动生成目录
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+%% --> 正式内容开始
+\section{数论函数}
+
+\begin{frame}{数论函数}
+
+\begin{definition}[数论函数]
+    在全体正整数（或者整数）上定义的函数称作数论函数。
+\end{definition}
+
+\begin{definition}[积性]
+    积性：若$\gcd(a,b)=1$，则$f(ab)=f(a)f(b)$。
+\end{definition}
+
+\end{frame}
+
+\AtBeginSection[]{\frame{\tableofcontents[currentsection,hideallsubsections]}}
+
+\begin{frame}{数论函数}
+
+\begin{example}[积性数论函数]
+    $1(x)=1,Id(x)=x,I(x)=[x=1]$；
+
+    欧拉函数$\varphi(x)$。
+\end{example}
+
+\end{frame}
+
+\begin{frame}{数论函数}
+
+\begin{definition}[狄利克雷卷积]
+    数论函数$f(n)$和$g(n)$的狄利克雷卷积$h(n)$定义为：
+    $$h(n)=\sum_{d|n}f(d)g(\frac{n}{d})$$
+
+    记作$h=f \ast g$。
+\end{definition}
+
+\begin{theorem}
+    两个积性函数的狄利克雷卷积也是积性函数。
+\end{theorem}
+
+\end{frame}
+
+\begin{frame}{数论函数}
+
+\begin{proof}
+    \begin{align*}
+        &h(xy)=\sum_{d|xy} f(d)g(\frac{xy}{d})=\sum_{d_1|x}\sum_{d_2|y} f(d_1d_2)g(\frac{xy}{d_1d_2})\\
+        =&\sum_{d_1|x}f(d_1)g(\frac{x}{d_1})\sum_{d_2|y} f(d_2)g(\frac{y}{d_2})=h(x)h(y)
+    \end{align*}
+\end{proof}
+
+\end{frame}
+
+\begin{frame}{数论函数}
+
+\begin{theorem}
+    两个积性函数的对应位置相乘也是积性函数。
+\end{theorem}
+
+很显然，证明略。
+
+\end{frame}
+
+\begin{frame}{数论函数}
+
+所以我们可以定义更多的数论函数，以及用卷积描述它们之间的关系：
+\begin{example}[数论函数]
+    $d(x)=\sum_{d|n}1$，即$d=1 \ast 1$；
+
+    $n = \sum_{d|n} \varphi(d)$，即$Id=\varphi \ast 1$。
+\end{example}
+
+\end{frame}
+
+\begin{frame}{数论函数}
+
+下面研究卷积的性质。
+\begin{theorem}[卷积运算律]
+    交换律：设有两个积性函数$f,g$，则$f \ast g = g\ast f$。
+
+    结合律：设有两个积性函数$f,g,h$，则$(f \ast g) \ast h = f \ast (g\ast h)$。
+\end{theorem}
+
+交换律的证明很显然。
+
+结合律的证明可以把式子改写成矩阵形式，然后用矩阵的结合律来证明。应该大力推式子也可以。
+
+\end{frame}
+
+\begin{frame}{数论函数}
+
+\begin{theorem}[单位元]
+    $I$是单位元：对任意的数论函数$f$，$f \ast I = I \ast f = f$。
+\end{theorem}
+
+\begin{proof}
+    $$f(n)=\sum_{d|n}f(d)I(\frac{n}{d})$$
+\end{proof}
+
+\end{frame}
+
+\begin{frame}{数论函数}
+
+\begin{definition}[狄利克雷逆]
+    若$f \ast g = I$，则数论函数$f,g$互为彼此的狄利克雷逆。
+\end{definition}
+
+\end{frame}
+
+\section{莫比乌斯反演}
+\begin{frame}{莫比乌斯反演}
+\begin{definition}[莫比乌斯函数]
+    定义莫比乌斯函数$\mu(n)$。
+    
+    当$n=1$时，$\mu(n)=1$。
+
+    当$n$是square-free number时，设$n$的质因数分解有$k$项，则$\mu(n)=(-1)^k$。
+
+    否则，$\mu(n)=0$。
+\end{definition}
+不难验证$\mu$也是积性函数。
+\end{frame}
+
+\begin{frame}{莫比乌斯反演}
+\begin{theorem}
+    $I = \mu \ast 1$，即$\mu$和$1$互为彼此的逆。
+\end{theorem}
+\begin{proof}
+    设$n$的不同质因子有$k$个，分别为$p_1,\cdots,p_k$，那么有
+    \begin{align*}
+        &\sum_{d|n}\mu(d)=\sum_{i=1}^k \sum_{\text{k个选i个,积为c}} \mu(c)\\
+        =&\sum_{i=1}^k \sum_{\text{k个选i个}} (-1)^i=\sum_{i=1}^k \binom{k}{i} (-1)^i=(1-1)^k\\
+        =&[k=0]=I(n)
+    \end{align*}
+\end{proof}
+\end{frame}
+
+\begin{frame}{莫比乌斯反演}
+\begin{definition}[莫比乌斯变换]
+    设数论函数$f$，称$F=f \ast 1$为莫比乌斯变换。
+\end{definition}
+\begin{definition}[莫比乌斯反演]
+    设数论函数$F$，称$f=F \ast \mu$为莫比乌斯反演。
+\end{definition}
+\begin{example}
+    $d=1 \ast 1$，即$d \ast \mu = 1$；
+
+    $Id=\varphi \ast 1$，即$Id \ast \mu = \varphi$。
+\end{example}
+\end{frame}
+
+\section{线性筛}
+
+\begin{frame}{厄拉多塞筛法}
+\begin{example}[厄拉多塞筛法]
+    $O(n\log \log n)$判断$2 \sim n$的所有数是否是质数。
+\end{example}
+有一张写了$2\sim n$这些数的表，$2$是质数，我们把表中其他所有$2$的倍数划去。然后$3$没有被划去，说明$3$是质数，把表中其他所有$3$的倍数划去。以此类推。
+
+时间复杂度$O(n+\frac{n}{2}+\frac{n}{3}+\frac{n}{5}+\frac{n}{7}+\cdots)=O(n\log\log n)$。
+\end{frame}
+
+\begin{frame}{线性筛}
+\begin{example}[线性筛]
+    $O(n)$判断$2 \sim n$的所有数是否是质数。
+\end{example}
+厄拉多塞筛法在筛$30=2\times 3 \times 5$这样的数时，会被$2,3,5$重复筛。
+
+线性筛的思路是，保证每个数只被它的最小的质因子筛去。
+\end{frame}
+
+\begin{frame}{线性筛}
+\begin{example}[线性筛]
+    $O(n)$判断$2 \sim n$的所有数是否是质数。
+\end{example}
+厄拉多塞筛法在筛$30=2\times 3 \times 5$这样的数时，会被$2,3,5$重复筛。
+
+线性筛的思路是，保证每个数只被它的最小的质因子筛去。
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{线性筛}
+
+我们先给出代码：
+\begin{block}{线性筛}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+for(int i = 2; i <= n; i++){
+    if(isp[i] == 0) pr[++cnt] = i;
+    for(int j = 1; j <= cnt && pr[j] * i <= n; j++){  
+        isp[i * pr[j]] = 1;  
+        if(i % pr[j] == 0) break;  
+    }  
+}
+\end{lstlisting}
+\end{block}
+保证每个数只被它的最小的质因子筛去，代码中体现在i \% pr[j] == 0。
+
+pr数组中的质数是递增的，当$pr[j]|i$时，$pr[j]|pj[j+1]i$，那么$pj[j+1]i$这个合数应该被$pr[j]$这个更小的质数筛掉。
+
+另外，当$pr[j]|i$时，$pr[j]$是$i$的最小质因子。否则$pr[j]$是$pr[j]i$的最小质因子。
+\end{frame}
+
+\begin{frame}{线性筛}
+\begin{example}[线性筛]
+    $O(n)$求出某些积性函数在$1 \sim n$处的所有取值。
+\end{example}
+我们沿用线性筛的过程，考虑这个问题。
+
+首先，线性筛筛出质数的时候，我们需要求这个积性函数在质数处的取值。
+
+其次，在for循环中，设$k=pr[j]$，当$k|i$时，由上面的讨论，$k$是$i$的最小质因子，设$k$在$i$中的幂次为$a$，那么$f(ki)=\frac{f(k^{a+1})}{f(k^a)}f(i)$。
+
+否则，因为$k$是质数，那么$\gcd(k,i)=1$，那么$f(ki)=f(k)f(i)$。
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{线性筛}
+\begin{example}[线性筛欧拉函数]
+    $O(n)$求出欧拉函数在$1 \sim n$处的所有取值。
+\end{example}
+由于$\frac{\varphi(k^{a+1})}{\varphi(k^a)}=k$，为一个定值，所以线性筛欧拉函数很容易。
+\begin{block}{线性筛欧拉函数}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+for(int i = 2; i <= n; i++){
+    if(isp[i] == 0) {pr[++cnt] = i; phi[i] = i - 1;}
+    for(int j = 1; j <= cnt && pr[j] * i <= n; j++){  
+        isp[i * pr[j]] = 1;  
+        if(i % pr[j] == 0) {
+            phi[i * pr[j]] = phi[i] * pr[j];
+            break;
+        }
+        phi[i * pr[j]] = phi[i] * (pr[j] - 1);
+    }  
+}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{线性筛}
+\begin{example}[线性筛莫比乌斯函数]
+    $O(n)$求出莫比乌斯函数在$1 \sim n$处的所有取值。
+\end{example}
+由于$\frac{\mu(k^{a+1})}{\mu(k^a)}=0$，为一个定值，所以也很容易。
+\begin{block}{线性筛莫比乌斯函数}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+for(int i = 2; i <= n; i++){
+    if(isp[i] == 0) {pr[++cnt] = i; mu[i] = -1;}
+    for(int j = 1; j <= cnt && pr[j] * i <= n; j++){  
+        isp[i * pr[j]] = 1;  
+        if(i % pr[j] == 0) {
+            mu[i * pr[j]] = 0;
+            break;
+        }
+        mu[i * pr[j]] = mu[i] * -1;
+    }  
+}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{线性筛}
+\begin{example}[线性筛约数个数]
+    $O(n)$求出约数个数函数$\tau$在$1 \sim n$处的所有取值。
+\end{example}
+由于$\frac{\tau(k^{a+1})}{\tau(k^a)}=\frac{a+2}{a+1}$，不为一个定值，所以在筛的过程中还要维护$i$的最小质因子的次数。
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{线性筛}
+\begin{block}{线性筛约数个数}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+for(int i = 2; i <= n; i++){
+    if(isp[i] == 0) {pr[++cnt] = i; tau[i] = 2; g[i] = 2;}
+    for(int j = 1; j <= cnt && pr[j] * i <= n; j++){  
+        isp[i * pr[j]] = 1;  
+        if(i % pr[j] == 0) {
+            tau[i * pr[j]] = (g[i] + 1) * tau[i] / g[i];
+            g[i * pr[j]] = g[i] + 1;
+            break;
+        }
+        tau[i * pr[j]] = tau[i] * 2;
+        g[i * pr[j]] = 2;
+    }
+}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\section{整数分块}
+
+\begin{frame}{整数分块}
+
+\begin{theorem}[整数分块]
+    对任意的$i$，$\lfloor \frac{n}{i} \rfloor$只有$O(\sqrt{n})$种取值。
+\end{theorem}
+
+\begin{proof}
+    当$1\le i \le \sqrt{n}$时，$\frac{n}{i}$有$O(\sqrt{n})$种取值。
+
+    当$i > \sqrt{n}$时，$\frac{n}{i} \le \sqrt{n}$，也只有$O(\sqrt{n})$种取值。
+
+    综上，只有$O(\sqrt{n})$种取值。
+\end{proof}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{整数分块}
+
+\begin{example}[计算下取整分式的和式]
+    计算$\sum_{i=1}^n \lfloor \frac{n}{i} \rfloor$。
+\end{example}
+
+由于$\lfloor \frac{n}{i} \rfloor$只有$O(\sqrt{n})$种取值，并且，使得$\lfloor \frac{n}{i} \rfloor$取相同取值的$i$也是一段一段的，所以我们只需要一段一段地计算即可。
+
+\begin{block}{整数分块}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+ll res = 0;
+for(int l = 1, r; l <= n; l = r + 1) {
+    r = n / (n / l);
+    res += (r - l + 1) * (n / l);
+}
+\end{lstlisting}
+\end{block}
+
+\end{frame}
+
+\section{练习}
+
+\begin{frame}{莫比乌斯反演}
+\begin{example}[accoders3465]
+    给出$n,m$，求$2\sum_{i=1}^n\sum_{j=1}^m \gcd(i,j) - nm$。
+
+    数据范围：$n,m \le 10^5$。
+\end{example}
+\pause
+我们之前学欧拉函数的时候，能求$\sum_{i=1}^n\sum_{j=1}^n \gcd(i,j)$，但是当$n\neq m$时，就不能再用欧拉函数求了。
+
+还是之前的套路，$\sum_{i=1}^n\sum_{j=1}^m \gcd(i,j)=\sum_{k=1}^{\min(n,m)}k\sum_{i=1}^n\sum_{j=1}^m [\gcd(i,j)=k]$。
+
+设$a=\lfloor \frac{n}{k} \rfloor,b=\lfloor \frac{m}{k} \rfloor$，继续推：
+
+$\sum_{i=1}^n\sum_{j=1}^m \gcd(i,j)=\sum_{k=1}^{\min(n,m)}k\sum_{i=1}^a\sum_{j=1}^b [\gcd(i,j)=1]$。
+\end{frame}
+
+\begin{frame}{莫比乌斯反演}
+\begin{align*}
+    &\sum_{k=1}^{\min(n,m)}k\sum_{i=1}^a\sum_{j=1}^b [\gcd(i,j)=1]=\sum_{k=1}^{\min(n,m)}k\sum_{i=1}^a\sum_{j=1}^b I(\gcd(i,j))\\
+    =&\sum_{k=1}^{\min(n,m)}k\sum_{i=1}^a\sum_{j=1}^b \sum_{d|\gcd(i,j)} \mu(d)=\sum_{k=1}^{\min(n,m)}k\sum_{d=1}^{\min(a,b)}\sum_{i=1}^{\lfloor \frac{a}{d} \rfloor}\sum_{j=1}^{\lfloor \frac{b}{d} \rfloor}\mu(d)\\
+    =&\sum_{k=1}^{\min(n,m)}k\sum_{d=1}^{\min(a,b)}\mu(d)\lfloor \frac{a}{d} \rfloor \lfloor \frac{b}{d} \rfloor
+\end{align*}
+到这里用整数分块已经可以做到$O(n\sqrt{n})$的复杂度，足以通过此题。
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{莫比乌斯反演}
+\begin{block}{整数分块}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+for(int k=1;k<=min(n,m);k++){
+    int a=n/k,b=m/k;
+    ll sum=0;
+    for(int l=1,r;l<=min(a,b);l=r+1){
+        r=min(a/(a/l),b/(b/l));
+        sum+=1ll*(smu[r]-smu[l-1])*(a/l)*(b/l);
+    }
+    ans+=sum*k;
+}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}{莫比乌斯反演}
+由答案的对称性，不妨设$n \le m$，然后我们继续推：
+\begin{align*}
+    &\sum_{k=1}^{n}k\sum_{d=1}^{a}\mu(d)\lfloor \frac{a}{d} \rfloor \lfloor \frac{b}{d} \rfloor=\sum_{k=1}^{n}k\sum_{d=1}^{\lfloor \frac{n}{k} \rfloor}\mu(d)\lfloor \frac{n}{kd} \rfloor \lfloor \frac{m}{kd} \rfloor \\
+    \overset{T=kd}{=}& \sum_{T=1}^{n} \lfloor \frac{n}{T} \rfloor \lfloor \frac{m}{T} \rfloor \sum_{k|T} k\mu(\frac{T}{k})
+\end{align*}
+由于$Id \ast \mu = \varphi$，所以$\sum_{k|T} k\mu(\frac{T}{k})=\varphi(T)$，那么最终答案就是$\sum_{T=1}^{n} \lfloor \frac{n}{T} \rfloor \lfloor \frac{m}{T} \rfloor \varphi(T)$。这个式子在线性筛出$\varphi$及其前缀和的情况下可以用整数分块做到$O(\sqrt{n})$一次回答（用于应对多组询问的情况）。这样我们就得到了一种$O(n)-O(\sqrt{n})$的算法。
+\end{frame}
+
+\begin{frame}{莫比乌斯反演}
+\begin{example}[accoders6724]
+    给出$n,m$，求$\sum_{i=1}^n\sum_{j=1}^m [\gcd(i,j) \in P]$。
+
+    数据范围：多组数据，$1 \le T \le 10^4$，$n,m \le 10^7$。
+\end{example}
+\pause
+类似的推法，最后得到：
+$$\sum_{T=1}^{n} \lfloor \frac{n}{T} \rfloor \lfloor \frac{m}{T} \rfloor \sum_{k|T,k\in P} \mu(\frac{T}{k})$$
+设$g(T)=\sum_{k|T,k\in P} \mu(\frac{T}{k})$，看上去不是很好线性筛，不过可以厄拉多塞筛法在$O(n\log\log n)$内算出其前缀和，然后用整数分块回答询问。
+\end{frame}
+
+\begin{frame}[plain]    %%谢谢
+	\vspace{0.4\textheight}
+	\begin{center}
+		\Huge\color{blue}\bfseries Thanks!
+	\end{center}
+\end{frame}
+
+\end{document}

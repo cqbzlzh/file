@@ -1,0 +1,19 @@
+\frametitle{高次同余初步}
+
+根据上述算法流程，不难写出代码：
+\begin{block}{exbsgs}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+ll EXBSGS(ll a,ll b,ll p){
+    ll t,c=0,v=1;
+    while((t=gcd(a,p))!=1){
+        if(b%t)return -1;
+        p/=t;b/=t;
+        v=v*a/t%p; // 注意这个地方p先除了再对v取模
+        ++c;if(b==v)return c;
+    }
+    ll ret=BSGS(a,b,p,v);
+    return ret!=-1?ret+c:ret;
+}
+\end{lstlisting}
+\end{block}

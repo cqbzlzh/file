@@ -1,0 +1,5 @@
+\beamer@sectionintoc {1}{定义}{3}{0}{1}
+\beamer@sectionintoc {2}{同余式的运算}{4}{0}{2}
+\beamer@sectionintoc {3}{剩余系}{7}{0}{3}
+\beamer@sectionintoc {4}{练习}{26}{0}{4}
+\beamer@sectionintoc {5}{extra}{46}{0}{5}

@@ -1,0 +1,15 @@
+\frametitle{莫比乌斯反演}
+\begin{block}{整数分块}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+for(int k=1;k<=min(n,m);k++){
+    int a=n/k,b=m/k;
+    ll sum=0;
+    for(int l=1,r;l<=min(a,b);l=r+1){
+        r=min(a/(a/l),b/(b/l));
+        sum+=1ll*(smu[r]-smu[l-1])*(a/l)*(b/l);
+    }
+    ans+=sum*k;
+}
+\end{lstlisting}
+\end{block}

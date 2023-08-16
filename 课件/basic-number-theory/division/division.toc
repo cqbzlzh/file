@@ -1,0 +1,7 @@
+\beamer@sectionintoc {1}{带余除法和整除}{3}{0}{1}
+\beamer@sectionintoc {2}{公因数}{5}{0}{2}
+\beamer@sectionintoc {3}{裴蜀定理}{12}{0}{3}
+\beamer@sectionintoc {4}{公倍数}{31}{0}{4}
+\beamer@sectionintoc {5}{质数和合数}{33}{0}{5}
+\beamer@sectionintoc {6}{练习}{38}{0}{6}
+\beamer@sectionintoc {7}{extra}{40}{0}{7}

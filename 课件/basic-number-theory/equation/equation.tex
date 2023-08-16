@@ -1,0 +1,300 @@
+\documentclass{ctexbeamer}        % 文档类beamer的汉化版本
+
+\usefonttheme{serif}              % 使用衬线字体
+\usefonttheme{professionalfonts}  % 数学公式字体
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{fontspec} % 定制字体
+\usepackage{xcolor} % 定制颜色
+\usepackage{hyperref}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+backgroundcolor=\color{white},      % choose the background color
+basicstyle=\footnotesize\ttfamily,  % size of fonts used for the code
+columns=fullflexible,
+tabsize=4,
+breaklines=true,               % automatic line breaking only at whitespace
+captionpos=b,                  % sets the caption-position to bottom
+commentstyle=\color{mygreen},  % comment style
+escapeinside={\%*}{*)},        % if you want to add LaTeX within your code
+keywordstyle=\color{blue},     % keyword style
+stringstyle=\color{mymauve}\ttfamily,  % string literal style
+frame=none,
+rulesepcolor=\color{red!20!green!20!blue!20},
+% identifierstyle=\color{red},
+language=c++,
+}
+
+%% --> 主题和色彩风格
+\usetheme{Frankfurt}       %主题和色彩可以自由搭配
+\usecolortheme{orchid}     %主题和色彩的样式可参见网页 https://mpetroff.net/files/beamer-theme-matrix/
+
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand{\stirling}[2]{\genfrac\{ \} {0pt}{}{#1}{#2}}
+\newcommand{\lcm}{\operatorname{lcm}}
+
+\begin{document}
+
+%% --> 导言页
+%
+\title{同余方程}
+\author{Quack}
+\date{\today}
+\frame{\titlepage}
+
+%% --> 目录结构
+\begin{frame}{目录}         %自动生成目录
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+%% --> 正式内容开始
+\section{线性同余方程}
+
+\begin{frame}{线性同余方程}
+
+\begin{definition}[线性同余方程]
+    $$ax \equiv b \pmod m$$
+\end{definition}
+
+对于一个线性同余方程$ax \equiv b \pmod m$，将其转化成二元一次不定方程$ax+my=b$，然后用之前我们讲过的方法去解即可。时间复杂度$O(\log m)$。
+
+\end{frame}
+
+\AtBeginSection[]{\frame{\tableofcontents[currentsection,hideallsubsections]}}
+
+\section{逆元}
+
+\begin{frame}{逆元}
+
+\begin{definition}[逆元]
+    对正整数$a$，$a$在模$m$意义下的逆元$a^{-1}$满足$aa^{-1} \equiv 1 \pmod m$。
+\end{definition}
+
+求一个数的逆元，可以转化成二元一次不定方程$ax+my=1$，然后用之前我们讲过的方法去解即可。时间复杂度$O(\log m)$。
+
+当$m$是质数的时候，由费马小定理，$a^{m-1}\equiv 1 \pmod m$，所以$a$和$a^{m-2}$互为逆元。可以用快速幂得到。时间复杂度$O(\log m)$。
+
+\end{frame}
+
+\begin{frame}{逆元}
+
+\begin{example}[多个数的逆元]
+    给出正整数$a_1,\cdots,a_n$，求这些数在模质数$p$意义下的逆元。要求复杂度$O(n)$。
+\end{example}
+\pause
+设前缀积$prod_i=\prod_{j=1}^i a_i$。可以$O(n)$递推求出$1\sim n$每个位置的前缀积。
+
+设前缀积的逆$iprod_i=prod_i^{-1}=prod_n^{-1}\prod_{j=i+1}^n a_i$。在求出$prod_n$后，花$O(\log p)$的时间求出$iprod_n$。然后可以$O(n)$递推求出$1\sim n$每个位置的前缀积的逆。
+
+$a_i$的逆$ia_i=a_i^{-1}=iprod_i prod_{i-1}$。所以在求出每个位置的前缀积和前缀积的逆后，可以$O(n)$求出$1\sim n$每个位置的逆元。总复杂度$O(n+\log p)$。
+
+\end{frame}
+
+\section{线性同余方程组}
+\begin{frame}{线性同余方程组}
+\begin{definition}[线性同余方程组]
+    有$n$个方程$x\equiv a_i \pmod{p_i}$，$p_i$两两互质，求$x$。
+\end{definition}
+\begin{theorem}[中国剩余定理，CRT]
+    设$P=\prod_{i=1}^n p_i,w_i=\frac{P}{p_i}$，则方程组的解为$x \equiv \sum_{i=1}^n a_iw_i inv(w_i,p_i) \pmod P$，其中，$inv(w_i,p_i)$表示$w_i$在模$p_i$意义下的逆。
+\end{theorem}
+不难验证这确实是方程组的一个解。直接按照公式计算，复杂度$O(n\log p)$。
+\end{frame}
+
+\begin{frame}{线性同余方程组}
+\begin{theorem}[中国剩余定理，CRT]
+    设$P=\prod_{i=1}^n p_i,w_i=\frac{P}{p_i}$，则方程组的解为$x \equiv \sum_{i=1}^n a_iw_i inv(w_i,p_i) \pmod P$，其中，$inv(w_i,p_i)$表示$w_i$在模$p_i$意义下的逆。
+
+    并且，CRT给出的是模$P$意义下的唯一解。
+\end{theorem}
+
+\begin{proof}
+    设$x_1$和$x_2$都是线性同余方程组的解。则对所有的$i$，有$x_1\equiv x_2 \pmod{p_i}$，即$p_i|(x_1-x_2)$，所以$\lcm(p_1,\cdots,p_n)|(x_1-x_2)$，又因为$p_i$两两互质，所以$\lcm(p_1,\cdots,p_n)=P$。
+\end{proof}
+\end{frame}
+
+\begin{frame}{线性同余方程组}
+\begin{example}[exCRT]
+    考虑求方程组$x\equiv a_1 \pmod{p_1}$和$x\equiv a_2 \pmod{p_2}$的解（$p_1$和$p_2$不互质）。
+\end{example}
+设$d=\gcd(p_1,p_2)$，那么必须$a_1\equiv a_2 \pmod d$。然后方程组的解一定可以表示为$wd+(a_1 \bmod d)$。
+
+所以有$wd+(a_1 \bmod d) \equiv a_1 \pmod{p_1} $，移项有$wd \equiv a_1-(a_1 \bmod d) \pmod{p_1} $，即$w \equiv \frac{a_1}{d} \pmod{\frac{p_1}{d}}$。
+
+类似地，有$w \equiv \frac{a_2}{d} \pmod{\frac{p_2}{d}}$。这两个同余方程的模数就互质了。可以用CRT求出$w$，进而得到原方程组的解。用之前的证明思路，同样可以证明这个方程的解是唯一的。
+
+注意到这样做每次会把两个方程合并成一个模数是它们lcm的方程。如果有多个这样的方程可以两两合并。
+\end{frame}
+
+\begin{frame}{线性同余方程组}
+\begin{theorem}[扩展欧拉定理]
+    若$b\ge \varphi(m)$，则$a^b\equiv a^{b \bmod \varphi(m)+\varphi(m)} \pmod m$。
+\end{theorem}
+注意到``扩展''之处是不要求$a$和$m$互质。
+\begin{proof}
+    设$m$的质因子分解为$m=\prod p_i^{a_i}$，由之前讲的欧拉函数的性质，$\varphi(p_i^{a_i})|\varphi(m)$。
+
+    考虑CRT，如果左右在模所有的$p_i^{a_i}$都相等，则它们相等。
+
+    当$p_i|a$时，由于$b \ge \varphi(m)\ge \varphi(p_i^{a_i}) \ge a_i$，于是左右两边都为$0$。
+
+    否则说明$\gcd(p_i,a)=1$，可以用欧拉定理，两边显然是相等的。
+\end{proof}
+\end{frame}
+
+\section{高次同余初步}
+
+\begin{frame}{高次同余初步}
+\begin{example}[bsgs]
+    设$\gcd(a,m)=1$，考虑求方程$a^x\equiv b \pmod m$的解。
+\end{example}
+令$B=\lceil \sqrt{m} \rceil$，把$(ba^0,0),(ba^1,1),\cdots,(ba^{B-1},B-1)$全部插入hash表里面。
+
+然后令$d=a^B$，计算$d^1,d^2,\cdots,d^B$，然后查询hash表里面有没有$d^i$。如果有，设对应的指数是$k$，那就说明$a^{iB}\equiv ba^k \pmod m$，由于$a,m$互质，所以有$a^{iB-k} \equiv b \pmod m$。那么就解出了方程的一个解$x=iB-k$。如果需要所有的解，这里还要继续枚举下去。如果枚举完了都没有，那就无解了。
+
+时间复杂度$O(\sqrt{m})$。
+\end{frame}
+
+\begin{frame}{高次同余初步}
+\begin{example}[exbsgs]
+    当$\gcd(a,m)\neq 1$时，考虑求方程$a^x\equiv b \pmod m$的解。
+\end{example}
+我们可以考虑从$x$个$a$中拿出$c$个$a$，与$b$和$m$消去公因子，直到$a$和$m'$互质为止。
+
+一旦互质了，方程就是$va^{x-c}=b' \pmod{m'}$。$v$是拿出$c$个$a$消去公因子后剩下的东西，$b',m'$是消去公因子的$b,m$。这时还要求$v$关于$m'$的逆元，方程变为$a^{x-c}=b'inv(v,m')\pmod{m'}$。此时就可以用bsgs做了，答案为bsgs的答案加$c$。时间复杂度$O(\sqrt{m})$。
+
+在实现的时候，可以不求$v$的逆元。bsgs里面新增一个参数$v$，然后哈希表比的时候一边是$va^{iB}$，一边是$ba^j$。
+
+注意，有可能在消的过程中方程两边就已经相等了，所以必须消去一次就特判一次方程两边（就是$v$和$b'$）是不是相等了。如果相等，直接返回此时的$c$。
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{高次同余初步}
+
+根据上述算法流程，不难写出代码：
+\begin{block}{exbsgs}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+ll BSGS(ll a,ll b,ll p,ll v=1){
+    ll m=ceil(sqrt(p)),val=1,d;
+    for(int i=0;i<m;++i){
+        ht.insert(b*val%p,i);
+        val=val*a%p;
+    }
+    d=v*val%p;
+    for(int i=1;i<=m;++i){
+        int res=ht.query(d);
+        if(res!=-1)return i*m-res;
+        d=d*val%p;
+    }
+    return -1;
+}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{高次同余初步}
+
+根据上述算法流程，不难写出代码：
+\begin{block}{exbsgs}
+\begin{lstlisting}[language={c++},
+                   numbers=left]
+ll EXBSGS(ll a,ll b,ll p){
+    ll t,c=0,v=1;
+    while((t=gcd(a,p))!=1){
+        if(b%t)return -1;
+        p/=t;b/=t;
+        v=v*a/t%p; // 注意这个地方p先除了再对v取模
+        ++c;if(b==v)return c;
+    }
+    ll ret=BSGS(a,b,p,v);
+    return ret!=-1?ret+c:ret;
+}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\section{练习}
+
+\begin{frame}{线性同余方程}
+\begin{example}[accoders2241]
+    \url{http://www.accoders.com/problem.php?id=2241}
+\end{example}
+\pause
+设跳了$t$步，不难写出方程$mt+x\equiv nt+y \pmod L$，然后移项，解就可以了。
+\end{frame}
+
+\begin{frame}{线性同余方程组}
+\begin{example}[accoders2244]
+    \url{http://www.accoders.com/problem.php?id=2244}
+\end{example}
+crt的模板题。
+\end{frame}
+
+\begin{frame}{扩展欧拉定理}
+\begin{example}[accoders3704]
+    给出$p$，求$2^{2^{2^{2^{\cdots}}}} \bmod p$。
+
+    数据范围：$p \le 10^7$。
+\end{example}
+\pause
+扩展欧拉定理的一个应用是求无穷层的幂，如这个题。
+
+记$f(p)=2^{2^{2^{2^{\cdots}}}} \bmod p$，则$f(p)\equiv 2^{f(\varphi(p))+\varphi(p)} \pmod p$。
+
+于是我们不断递归至$\varphi(p)=1$，此时$f(\varphi(p))=0$。
+\end{frame}
+
+\begin{frame}{bsgs}
+\begin{example}[accoders10371 \& 9100]
+    \url{http://www.accoders.com/problem.php?id=10371}
+
+    \url{http://www.accoders.com/problem.php?id=9100}
+\end{example}
+分别是bsgs和exbsgs的模板题。
+\end{frame}
+
+\begin{frame}{bsgs}
+\begin{example}[accoders10376]
+    \url{http://www.accoders.com/problem.php?id=10376}
+\end{example}
+这说明了写不带求逆的bsgs的好处。
+\end{frame}
+
+\section{extra}
+
+\begin{frame}{exlucas}
+
+\begin{theorem}[exlucas]
+	求$\binom{n}{m} \bmod q$，$q$为合数。
+\end{theorem}
+首先，我们把$q$分解质因数，那么问题就转化成求$\binom{n}{m} \bmod{p^a}$，对每个质数的幂最后再用CRT合并。
+
+由于阶乘中可能有质因子$p$，所以不能直接求逆。而是应该求下面两个问题：
+
+\begin{itemize}
+    \item $n!$中$p$的次数为多少？
+    \item $n!$中把所有$p$的质因子提出来之后，$\frac{n!}{p^l} \bmod p^a$的值？
+\end{itemize}
+\end{frame}
+
+\begin{frame}{exlucas}
+
+对于第一个问题，$n!$中$p$的次数等于$n!$中含有因子$p$的数的个数加$n!$中含有因子$p^2$的数的个数，以此类推，一直加下去。比较好算。
+
+对于第二个问题，首先把$n!$中$p$的倍数提出来，一共有$\frac{n}{p}$个，都提一个$p$以后，就是一个规模为$\frac{n}{p}$的子问题。由于$p$是质数，所以$n!$中非$p$的倍数就和$p$互质。在模$p^a$意义下会循环$\frac{n}{p^a}$次，还有一个长为$n \bmod{p^a}$的不完整的循环，这个不完整的循环暴力算。循环节内部的元素都是小于$p^a$且和$p^a$互质的元素，这相当于求模$p^a$意义下缩系元素之积。有结论（hdu4910），当$p>2$或$p=2,a\le 2$时，答案就是$p^a-1$，当$p=2,a\ge 3$时，答案就是$1$。当然你也可以暴力算。
+\end{frame}
+
+\begin{frame}[plain]    %%谢谢
+	\vspace{0.4\textheight}
+	\begin{center}
+		\Huge\color{blue}\bfseries Thanks!
+	\end{center}
+\end{frame}
+
+\end{document}

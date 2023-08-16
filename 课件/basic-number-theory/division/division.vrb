@@ -1,0 +1,6 @@
+\frametitle{几个证明题}
+\begin{example}
+    $f_n$表示fib数列第$n$项（$f_1=f_2=1$），$\gcd(f(n),f(m))=f(\gcd(n,m))$
+\end{example}
+\pause
+证明参考\href{https://www.cnblogs.com/ljc20020730/p/10126623.html}{链接}
